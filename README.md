@@ -10,7 +10,8 @@ Setup
 3) Create a [twilio](https://www.twilio.com/try-twilio) account and add a phone number
 4) Create a secrets.yaml from the secrets.yaml.template setting account info from twilio
 5) Create aws account and setup credentials in ~/.aws
-6) From lambda_code directory run `zip -r ../twilioLambda.zip *`
+6) Modify `handle_text_message` in lambda_code/lambda_function.py to create your responder
+7) From lambda_code directory run `zip -r ../twilioLambda.zip *`
 
 Deploy infrastructure
 =====================
