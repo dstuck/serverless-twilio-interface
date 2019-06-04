@@ -4,7 +4,7 @@ import yaml
 from twilio.rest import Client
 
 
-def update_twilio_webhook(api_url_base, endpoint, number_to_set=None):
+def update_twilio_webhook(api_url_base, endpoint):
     """
     Update
     :param api_url_base: url for api
@@ -19,6 +19,7 @@ def update_twilio_webhook(api_url_base, endpoint, number_to_set=None):
         config['account_sid'],
         config['auth_token']
     )
+    number_to_set = config['service_phone']
 
     webhook_url = "{}{}".format(api_url_base, endpoint)
     numbers = twilio_client.incoming_phone_numbers.list()
@@ -34,8 +35,6 @@ if __name__ == "__main__":
     PARSER.add_argument('api_url_base')
     PARSER.add_argument('endpoint')
     PARSED_ARGS = PARSER.parse_args()
-
-    twilio_number = os.environ.get("TWILIO_NUMBER")
 
     update_twilio_webhook(
         PARSED_ARGS.api_url_base,
