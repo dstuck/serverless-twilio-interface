@@ -42,7 +42,6 @@ resource "aws_api_gateway_integration" "integration" {
 MAPPER
   }
   uri                     = "arn:aws:apigateway:${var.myregion}:lambda:path/2015-03-31/functions/${aws_lambda_function.twilio_lambda.arn}/invocations"
-  depends_on              = ["aws_lambda_permission.apigw_lambda"]
 }
 
 resource "aws_api_gateway_method_response" "200" {
