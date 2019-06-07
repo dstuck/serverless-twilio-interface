@@ -19,12 +19,15 @@ def update_twilio_webhook(api_url_base, endpoint):
         config['account_sid'],
         config['auth_token']
     )
-    number_to_set = config['service_phone']
+    number_to_set = str(config['service_phone'])
+    if not number_to_set.startswith('+'):
+        number_to_set = "+" + number_to_set
 
     webhook_url = "{}{}".format(api_url_base, endpoint)
     numbers = twilio_client.incoming_phone_numbers.list()
     if number_to_set:
         numbers = [number for number in numbers if number.phone_number == number_to_set]
+        print("Setting webhook for: {}".format([n.phone_number for n in numbers]))
     for number in numbers:
         number.update(sms_url=webhook_url)
 
