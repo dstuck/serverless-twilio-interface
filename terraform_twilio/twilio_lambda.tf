@@ -1,3 +1,19 @@
+variable "twilio_zip_path" {
+  type = "string"
+  default = "../twilioLambda.zip"
+}
+
+variable "twilio_lambda_dir" {
+  type = "string"
+  default = "../lambda_code/"
+}
+
+data "archive_file" "lambda_zip" {
+  type        = "zip"
+  source_dir  = "${var.twilio_lambda_dir}"
+  output_path = "${var.twilio_zip_path}"
+}
+
 resource "aws_lambda_permission" "apigw_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
@@ -9,17 +25,19 @@ resource "aws_lambda_permission" "apigw_lambda" {
 }
 
 resource "aws_lambda_function" "twilio_lambda" {
-  filename      = "../twilioLambda.zip"
+  filename      = "${var.twilio_zip_path}"
   function_name = "twilio_lambda"
   role          = "${aws_iam_role.lambda_role.arn}"
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.6"
   timeout       = 10
 
+//  depends_on = ["archive_file.lambda_zip"]
+
   # The filebase64sha256() function is available in Terraform 0.11.12 and later
   # For Terraform 0.11.11 and earlier, use the base64sha256() function and the file() function:
-  # source_code_hash = "${base64sha256(file("lambda.zip"))}"
-  source_code_hash = "${filebase64sha256("../twilioLambda.zip")}"
+  source_code_hash = "${data.archive_file.lambda_zip.output_base64sha256}"
+//  source_code_hash = "${filebase64sha256("${var.twilio_zip_path}")}"
 }
 
 # IAM
