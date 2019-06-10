@@ -8,6 +8,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "twilio==6.27.1",
+        "PyYAML"
     ],
     scripts=[]
 )
